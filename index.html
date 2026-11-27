@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <!-- 狀態列顏色跟頁面背景一樣；網頁手動切換深淺色時會用 postMessage 通知這裡改色 -->
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f4">
-  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#23262b">
+  <!-- 手機上下的狀態列、導覽列固定純黑（Sam 決定，深淺色模式都一樣） -->
+  <meta name="theme-color" content="#000000">
   <title>Thincery</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
@@ -27,13 +26,6 @@
     <a href="https://script.google.com/macros/s/AKfycbyDhROsmlwx6C7WJjds9wKkKTGc3uKWJSP46wgN4ZJTHDVtOQg_Z3zq__6veYdAkbczxw/exec" target="_blank" rel="noopener">改在新分頁開啟</a>
   </div>
   <script>
-    // 網頁（Apps Script）切換深淺色時傳來 { type: 'thincery-theme', color: '#rrggbb' }，把狀態列換成同一個顏色
-    window.addEventListener('message', function (e) {
-      var d = e.data;
-      if (!d || d.type !== 'thincery-theme' || !/^#[0-9a-f]{6}$/i.test(d.color)) return;
-      document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute('content', d.color); });
-      document.documentElement.style.background = document.body.style.background = d.color;
-    });
     // 20 秒還沒載入完成就顯示備用連結
     var loaded = false;
     document.getElementById('app').addEventListener('load', function () { loaded = true; });
