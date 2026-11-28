@@ -2,7 +2,9 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- interactive-widget=resizes-content：鍵盤彈出時直接縮小畫面，不推動可視範圍。
+       預設的推動方式在鍵盤收起後偶爾沒歸位，觸控位置跟畫面錯開，整個畫面點不動 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
   <!-- 手機上下的狀態列、導覽列固定純黑（Sam 決定，深淺色模式都一樣） -->
   <meta name="theme-color" content="#000000">
   <title>Thincery</title>
@@ -31,6 +33,14 @@
     document.getElementById('app').addEventListener('load', function () { loaded = true; });
     setTimeout(function () { if (!loaded) document.getElementById('fallback').style.display = 'block'; }, 20000);
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+    // 外殼本身不捲動：可視範圍被推開（例如鍵盤收起後沒歸位）就拉回左上角，觸控位置才會跟畫面對齊
+    if (window.visualViewport) {
+      var realign = function () {
+        if (window.scrollX || window.scrollY) window.scrollTo(0, 0);
+      };
+      visualViewport.addEventListener('resize', function () { setTimeout(realign, 100); });
+      visualViewport.addEventListener('scroll', function () { setTimeout(realign, 100); });
+    }
   </script>
 </body>
 </html>
